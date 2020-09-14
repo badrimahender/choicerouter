@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d1961a35-10ff-4d53-9567-df0bd34e29a6" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<flow name="choice-routerFlow" doc:id="478fd8c1-49bb-42a4-9d8a-e6441063fa9b" initialState="stopped">
+		<http:listener doc:name="Listener" doc:id="f3e83c38-c36c-4baf-bb1a-b7f89000192e" config-ref="HTTP_Listener_config" path="/testContentBasedRouting"/>
+		<logger level="INFO" doc:name="Logger" doc:id="fe013a97-3599-46d7-85b1-4b9ee0aa08c1"/>
+		<set-variable value='#[attributes.queryParams.fruit]' doc:name="fruit" doc:id="8a28b1f2-5b00-47f3-843b-9988f2cf56af" variableName='fruit'/>
+		<choice doc:name="Choice" doc:id="cd18e9e9-f3c2-443d-a986-52b9b03c45ff" >
+			<when expression="#[vars.fruit == 'grapes']">
+				<set-payload value='"colour is green"' doc:name="Set Payload" doc:id="46d7a8f8-3506-4567-94df-8a078503f0de" />
+			</when>
+			<when expression="#[vars.fruit == 'mango']">
+				<set-payload value='colour is "yellow"' doc:name="Set Payload" doc:id="ee21b9b1-1399-4784-9805-a45f5e52bdc5" />
+			</when>
+			<otherwise >
+				<set-payload value='display the default colour as "white"' doc:name='display the default colour as "white"' doc:id="3e4ef8e5-05b8-4e5e-b26b-b77845d103fd" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="2b618f55-c4b6-4a87-a5db-dc8131584ae1" message="#[payload]"/>
+	</flow>
+	
+	<flow name="choice-routerFlow1" doc:id="6abd62ff-d64f-42ee-87ae-c6176a38565f" >
+		<http:listener doc:name="Listener" doc:id="823bbd4f-7aa9-48d2-8867-53d744884e40" config-ref="HTTP_Listener_config" path="/testContentBasedRouting/{fruit}"/>
+		<logger level="INFO" doc:name="Logger" doc:id="adf51e49-4355-4a8d-83c5-4db5bb8529d7"/>
+		<set-variable value='#[attributes.uriParams.fruit]' doc:name="fruit" doc:id="a996163a-4927-406f-981c-b3b3d9229844" variableName='fruit'/>
+		<choice doc:name="Choice" doc:id="4b3f240a-8c2c-401b-a9a7-4c78bf1790b0" >
+			<when expression="#[vars.fruit == 'grapes']">
+				<set-payload value='"colour is green"' doc:name="Set Payload" doc:id="47d580b1-4887-4ac6-bbd0-25f45f1ffe25" />
+			</when>
+			<when expression="#[vars.fruit == 'mango']">
+				<set-payload value='colour is "yellow"' doc:name="Set Payload" doc:id="b7d2bd5d-d1de-4896-99be-44f882e06676" />
+			</when>
+			<otherwise >
+				<set-payload value='display the default colour as "white"' doc:name='display the default colour as "white"' doc:id="379a0175-71ba-4a54-a3c2-ad204851bfdd" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="dbaf5632-b004-4ac7-b9d0-f3ffc414fb02" message="#[payload]"/>
+	</flow>
+</mule>
