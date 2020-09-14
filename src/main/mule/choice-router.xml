@@ -40,6 +40,6 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 				<set-payload value='display the default colour as "white"' doc:name='display the default colour as "white"' doc:id="379a0175-71ba-4a54-a3c2-ad204851bfdd" />
 			</otherwise>
 		</choice>
-		<logger level="INFO" doc:name="Logger" doc:id="dbaf5632-b004-4ac7-b9d0-f3ffc414fb02" message="#[payload]"/>
+		<logger level="INFO" doc:name="Logger" doc:id="dbaf5632-b004-4ac7-b9d0-f3ffc414fb02" message="final logger"/>
 	</flow>
 </mule>
